@@ -14,7 +14,10 @@
 
   	<header class="container">
 	<nav class="navbar navbar-light navbar-expand-md bg-faded justify-content-center">
-	    <a href="/" class="navbar-brand d-flex w-50 mr-auto">USUBA</a>
+	    <a href="/" class="navbar-brand d-flex w-50 mr-auto">
+	    	<img src="/assets/images/logo_final.svg" style="height:3.5rem">
+	    	USUBA
+	    </a>
 	    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsingNavbar3">
 	        <span class="navbar-toggler-icon"></span>
 	    </button>
@@ -39,7 +42,7 @@
 <div class="container mt-5 py-5 bg-light">
   	<h2 class="text-center display-4">USUBA is a <b>bitslicing</b>, <b>optimized</b> and <b>trustworthy</b> compiler</h2>
   	<div class="card-deck">
-  		<div class="card">
+  		<div class="card border-primary">
   			<div class="card-body">
 	  			<h5 class="card-title">Bitslicing</h5>
 	  			<p class="card-text">Bitslicing consists in reducing an algorithm to bitwise operations, which increases performance by exploiting dataparallelism, while improving security.</p>
@@ -51,7 +54,7 @@
 	  			<p class="card-text">USUBA generates optimized C code that runs fast, and makes all required optimizations.</p>
 	  		</div>
   		</div>
-  		<div class="card">
+  		<div class="card border-secondary">
   			<div class="card-body">
 	  			<h5 class="card-title">Trustworthy</h5>
 	  			<p class="card-text">To ensure that our optimizations are always correct, and that the bitslicing always work as intended, USUBA is proven.</p>
@@ -66,7 +69,7 @@
 		<div class="col col-lg-9">
 			<h2 class="mb-5">What can you do with USUBA?</h2>
 			<div class="card-columns">
-	  		<div class="card bg-primary text-white">
+	  		<div class="card bg-primary">
 	  			<div class="card-body">
 		  			<h5 class="card-title">Cryptography</h5>
 		  			<p class="card-text">Bitslicing significantly improves the performance of certain algorithmic operations. We have shown in our papers that USUBA runs AES faster than rival state-of-the-art compilers.</p>
@@ -78,7 +81,7 @@
 		  			<p class="card-text">With the proliferation of micro-processors and other embedded electronics, security is a paramount concern. USUBA can help protect IOT electronics again several types of attacks.</p>
 		  		</div>
 	  		</div>	
-	  		<div class="card">
+	  		<div class="card border-secondary">
 	  			<div class="card-body">
 		  			<h5 class="card-title">Research</h5>
 		  			<p class="card-text">USUBA is a great platform to make research on bitslicing. We also encourage compilation professors to use our compiler to teach their students about bitslicing, optimization, and how to prove code.</p>
@@ -107,10 +110,10 @@
 				<p>The creators of USUBA regularly publish blog posts to help the community better understand how USUBA works. In particular, you can expect posts about bitslicing, compilation, and more!</p>
 				<a class="btn btn-primary" href="/blog">Read our blog</a>
 			</div>
-			<div class="w-100 border border-dark p-3 my-3 rounded">
+			<div class="w-100 border border-secondary p-3 my-3 rounded">
 				<h3>Ready to dive into the source code?</h3>
 				<p>USUBA is an open-source project. We publish our code on Github, and you are most welcome to visit our repository there.</p>
-				<a class="btn btn-dark" href="https://github.com/DadaIsCrazy/usuba" target="_blank">Go to Github</a>
+				<a class="btn btn-secondary" href="https://github.com/DadaIsCrazy/usuba" target="_blank">Go to Github</a>
 			</div>
 			<div class="w-100 border border-dark p-3 my-3 rounded">
 				<h3>Let's get in touch!</h3>
