@@ -1,8 +1,8 @@
 # Site settings
 title: USUBA
-description: Usuba language website
-url: usuba-crypto.github.io
-
+description: Usuba website
+url: https://hecmer.github.io/usuba-crypto/
+base-url: /usuba-crypto
 # Build settings
 sass:
   sass_dir: css
