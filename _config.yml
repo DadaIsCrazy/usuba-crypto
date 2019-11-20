@@ -1,0 +1,19 @@
+# Site settings
+title: USUBA
+description: Usuba language website
+url: usuba-crypto.github.io
+
+# Build settings
+sass:
+  sass_dir: css
+gems:
+  - jekyll-paginate-v2
+
+pagination:
+  enabled: true
+  per_page: 5
+  permalink: '/page/:num/'
+  sort_field: 'date'
+  sort_reverse: true
+
+permalink: /:year/:month/:title.html
