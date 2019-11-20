@@ -17,3 +17,14 @@ pagination:
   sort_reverse: true
 
 permalink: /:year/:month/:title.html
+
+# Github specific settings
+lsi: false
+safe: true
+incremental: false
+highlighter: rouge
+gist:
+  noscript: false
+kramdown:
+  math_engine: mathjax
+  syntax_highlighter: rouge
