@@ -2,7 +2,7 @@
 title: USUBA
 description: Usuba website
 url: https://hecmer.github.io/usuba-crypto/
-base-url: /usuba-crypto
+base-url: https://hecmer.github.io/usuba-crypto
 # Build settings
 sass:
   sass_dir: css
