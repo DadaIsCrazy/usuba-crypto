@@ -2,21 +2,31 @@
 title: USUBA
 description: Usuba website
 url: https://hecmer.github.io/usuba-crypto/
-base-url: https://hecmer.github.io/usuba-crypto
+baseurl: /usuba-crypto
 # Build settings
 sass:
   sass_dir: css
-gems:
-  - jekyll-paginate-v2
 
-pagination:
-  enabled: true
-  per_page: 5
-  permalink: '/page/:num/'
-  sort_field: 'date'
-  sort_reverse: true
+plugin:
+  - jekyll-feed
+  - jekyll-paginate
 
-permalink: /:year/:month/:title.html
+# Paginate v1
+paginate_path: "/blog/page:num/"
+paginate: 5
+
+
+# Paginate v2
+# gems:
+#   - jekyll-paginate-v2
+# pagination:
+#   enabled: true
+#   per_page: 5
+#   permalink: '/page/:num/'
+#   sort_field: 'date'
+#   sort_reverse: true
+
+# permalink: /:year/:month/:title.html
 
 # Github specific settings
 lsi: false
