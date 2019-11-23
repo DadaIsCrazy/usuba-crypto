@@ -6,10 +6,14 @@ comments: true
 <div class="container bg-light">
 	<div class="row justify-content-center py-5">
 		<div class="col-lg-7 text-left">
+			<!-- Title -->
 			<h1 class="mb-1">{{ page.title }}</h1>
+			<!-- meta info -->
 			<div class="mt-1 mb-4"><em>Published on {{ page.date | date: "%Y-%m-%d" }} by {{ page.author }}</em></div>
-			{{ content }}
-
+			<!-- body of the article -->
+			<div class="border-bottom">
+				{{ content }}
+			</div>
 			<!-- Disqus comments -->
 			{% if page.comments %}
 			<div id="disqus_thread" class="border-top my-5 py-5"></div>
@@ -33,6 +37,7 @@ comments: true
 			<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 			{% endif %}
 
+			<div class="mt-5 text-center"><a href="{{ site.baseurl }}/blog">Read more blog articles</a></div>
 		</div>
 	</div>
 </div>
