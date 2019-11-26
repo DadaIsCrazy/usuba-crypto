@@ -14,7 +14,7 @@ Comme tous les mois, la mise à jour de Février amène quelques changements à 
 
 ## Mise à jour des loyers
 
-Le premier changement est l'habituelle mise à jour des prix des loyers, grâces aux données récoltées pendant le mois précédent. Cette mise à jour de nos données n'a pas fait bouger le classement d'un poil, signe que nos données commencent à être de plus en plus fiables.
+Le premier changement <a name="ref1" href="#footnote1">[1]</a> est l'habituelle mise à jour des prix des loyers, grâces aux données récoltées pendant le mois précédent. Cette mise à jour de nos données n'a pas fait bouger le classement d'un poil, signe que nos données commencent à être de plus en plus fiables.
 
 Il faudra peut-être commencer à ne prendre en considération que le prix des loyers sur les 6 derniers mois, afin de renforcer la fiabilité de la donnée, et permettre au classement de s'adapter aux conditions réelles. Mais réservons ce changement pour de prochains mois, voire pour la fin de l'année 2019... Il se pourrait en effet que mes scrappers n'indiquent pas la date de publication des annonces immobilières, et ne mentionnent pas non plus dans le format de sortie la date à laquelle la donnée a été identifiée... A suivre !
 <!--more-->
@@ -40,3 +40,5 @@ Je me léchais les babines. J'avais hâte. Je cours sur internet, je trouve le R
 Boudiou ! Encore la faute à ces andouilles de teutons. L'alsace et la moselle étaient Allemandes lors de l'entrée en vigueur de la loi sur les associations de 1901. Déception, pleurs, tristesse. Et voilà comment l'héritage historique de l'Est français a pourri mon week-end.
 
 Je n'en reste pas moins déterminé à améliorer chacune des notes que j'attribue à nos villes françaises. Si vous avez des idées, n'hésitez pas à m'en faire part ! Et si possible, vérifiez d'abord que la donnée est disponible en Alsace Moselle, merci !
+
+<a name="footnote1" href="#ref1">[1]</a>: Footnote content goes here
