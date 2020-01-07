@@ -1,146 +1,591 @@
-<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/usuba-crypto/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/usuba-crypto/" rel="alternate" type="text/html" /><updated>2020-01-05T19:02:46+01:00</updated><id>http://localhost:4000/usuba-crypto/feed.xml</id><title type="html">USUBA</title><subtitle>Usuba website</subtitle><entry xml:lang="fr"><title type="html">Mise à jour Février 2019</title><link href="http://localhost:4000/usuba-crypto/2019/02/11/mise-a-jour-fevrier-2019.html" rel="alternate" type="text/html" title="Mise à jour Février 2019" /><published>2019-02-11T00:00:00+01:00</published><updated>2019-02-11T00:00:00+01:00</updated><id>http://localhost:4000/usuba-crypto/2019/02/11/mise-a-jour-fevrier-2019</id><content type="html" xml:base="http://localhost:4000/usuba-crypto/2019/02/11/mise-a-jour-fevrier-2019.html">&lt;p&gt;Comme tous les mois, la mise à jour de Février amène quelques changements à la méthodologie du classement et aux données de base !&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8"?><feed xmlns="http://www.w3.org/2005/Atom" ><generator uri="https://jekyllrb.com/" version="3.8.5">Jekyll</generator><link href="http://localhost:4000/usuba-crypto/feed.xml" rel="self" type="application/atom+xml" /><link href="http://localhost:4000/usuba-crypto/" rel="alternate" type="text/html" /><updated>2020-01-07T18:17:00+01:00</updated><id>http://localhost:4000/usuba-crypto/feed.xml</id><title type="html">USUBA</title><subtitle>Usuba website</subtitle><entry xml:lang="en"><title type="html">Usuba - the genesis</title><link href="http://localhost:4000/usuba-crypto/2020/01/07/usuba-genesis.html" rel="alternate" type="text/html" title="Usuba - the genesis" /><published>2020-01-07T00:00:00+01:00</published><updated>2020-01-07T00:00:00+01:00</updated><id>http://localhost:4000/usuba-crypto/2020/01/07/usuba-genesis</id><content type="html" xml:base="http://localhost:4000/usuba-crypto/2020/01/07/usuba-genesis.html">&lt;!-- Left-over paragraph --&gt;
+&lt;!--
+Motivation: cryptographic primitive implementations
+ - correctness
+ - security
+ - performances
+--&gt;
+&lt;!-- Implementations of cryptographic primitives can be judged on three --&gt;
+&lt;!-- criteria: --&gt;
 
-&lt;h2 id=&quot;mise-à-jour-des-loyers&quot;&gt;Mise à jour des loyers&lt;/h2&gt;
+&lt;!--  - **Correctness**: implementations must compute what their --&gt;
+&lt;!--    specifications describe. While this is the basic requirement for --&gt;
+&lt;!--    any code ever written, it is far from trivial to convince oneself --&gt;
+&lt;!--    that a highly optimized assembly hand-tuned code is correct, let --&gt;
+&lt;!--    alone prove it [20,21]. --&gt;
 
-&lt;p&gt;Le premier changement est l’habituelle mise à jour des prix des loyers, grâces aux données récoltées pendant le mois précédent. Cette mise à jour de nos données n’a pas fait bouger le classement d’un poil, signe que nos données commencent à être de plus en plus fiables.&lt;/p&gt;
+&lt;!--  - **Security**¹: implementations must be resilient to some if not all --&gt;
+&lt;!--    side-channel attacks. While some side-channels attacks are not --&gt;
+&lt;!--    easily implemented on traditional servers (fault-injection, power --&gt;
+&lt;!--    analysis, ...), others like timing attacks have been shown to be --&gt;
+&lt;!--    very effective [3] and cannot be overlooked. --&gt;
 
-&lt;p&gt;Il faudra peut-être commencer à ne prendre en considération que le prix des loyers sur les 6 derniers mois, afin de renforcer la fiabilité de la donnée, et permettre au classement de s’adapter aux conditions réelles. Mais réservons ce changement pour de prochains mois, voire pour la fin de l’année 2019… Il se pourrait en effet que mes scrappers n’indiquent pas la date de publication des annonces immobilières, et ne mentionnent pas non plus dans le format de sortie la date à laquelle la donnée a été identifiée… A suivre !
-&lt;!--more--&gt;&lt;/p&gt;
-&lt;h2 id=&quot;prix-des-courses-en-supermarché&quot;&gt;Prix des courses en supermarché&lt;/h2&gt;
+&lt;!--  - **Performances**: cryptography must be as fast as possible in order --&gt;
+&lt;!--    to be transparent from the application's perspective. To achieve --&gt;
+&lt;!--    high throughputs, cryptographers carefully hand-tune their --&gt;
+&lt;!--    implementations, exploiting specific features of the CPU --&gt;
+&lt;!--    microarchitectures they target, thus obscuring the behavior of the --&gt;
+&lt;!--    programs, sometimes raising doubts about correctness and security. --&gt;
 
-&lt;p&gt;Un peu par accident, je suis tombé sur une magnifique carte de France montrant le prix moyen des courses que nous réalisons chaque mois, département par département. Les chiffres vont de 350€ à 415€ : au final, c’est assez rapproché, mais il y a tout de même une différence, qui se fait bien sentir. Bien sûr, ces chiffres dépendent beaucoup de l’enseigne et de la localisation précise de cette dernière, mais globalement, ces prix nous donnent une bonne indication du coût de la vie.&lt;/p&gt;
+&lt;!-- End of left-over paragraph --&gt;
 
-&lt;p&gt;J’ai donc ajouté ce critère au Loyer. Cela m’a permis par la même occasion de simplifier significativement la méthode de calcul de la note de loyer : elle correspond maintenant aux quintiles, alors qu’auparavant j’utilisais un calcul plus complexe.&lt;/p&gt;
+&lt;!--
+Overview
+  - crypto very high-level intro
+  - Usuba, our savior
+  - Blockcipher description, Usuba example (Rectangle)
+  - Constant-time
+  - Bitslicing
+  - m-slicing
+  - Crypto != AES, ==&gt; Usuba is useful
+  - Conclusion
+--&gt;
 
-&lt;h2 id=&quot;un-nouveau-critère-&quot;&gt;Un nouveau critère ?&lt;/h2&gt;
+&lt;!--
+Cryptography
+ - definition
+   + etymology
+   + plaintext, ciphertext, cipher, key
+ - history:
+   + Egypt
+   + Caesar
+   + Enigma
+ - used everywhere:
+   + secure communication
+   + store secure data (passwords, ...)
+ -&gt; different protocols and primitives
+   + example protocols: SSL/TLS
+   + example primitives: AES, Chacha20, RSA, DES
+--&gt;
 
-&lt;p&gt;Troisième mise à jour importante…. Une tentative avortée. Voilà, c’est dit. Je suis toujours à l’affut de nouveaux critères pour affiner mon classement, mais je suis très pointilleux. Si vous me proposez un critère, je vais m’assurer qu’il respecte plusieurs caractéristiques :&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;Il doit être univoque, c’est à dire qu’il est clair qu’il est indiscutable que lorsque la note est élevée, c’est un point positif, et que quand la note est faible, c’est un point négatif. Ce n’est pas toujours évident. Par exemple, j’ai hésité à intégrer le nombre de policiers dans la note de sécurité. Mais un nombre de policier élevé est-il un signe d’une sécurité accrue, ou d’une délinquance particulièrement élevée ? Ce n’est pas évident, et un nombre de policier élevé peut probablement indiquer chacun de ces deux cas.&lt;/li&gt;
-  &lt;li&gt;Il doit être disponnible en ligne, sans trop de soucis. Dans l’idéal, sous la forme d’une base de donnée, ou structurée d’une autre manière, sur un site internet que je peux scraper avec mes petits programmes en python. Au pire, si la donnée est très intéressante, je peux aussi passer une petite heure à la noter pour les 250 villes que j’ai dans mon classement initial. &lt;a name=&quot;ref1&quot; href=&quot;#footnote1&quot;&gt;[1]&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;Il doit être disponible sur la totalité du territoire, pour des raisons évidentes : si je ne peux pas noter certaines villes, comment peut-on avoir un classement objectif au niveau national ?&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;Cryptography, from the Ancient Greek &lt;em&gt;kryptos&lt;/em&gt; “hidden” and &lt;em&gt;graphein&lt;/em&gt;
+“to write”, is the practice of securing a communication by
+transforming its content (the &lt;em&gt;plaintext&lt;/em&gt;) into an unintelligible text
+(the &lt;em&gt;ciphertext&lt;/em&gt;), using an algorithm called a &lt;em&gt;cipher&lt;/em&gt;, which often
+takes as additional input a secret &lt;em&gt;key&lt;/em&gt; known only from the persons
+encrypting and decrypting the communication. Cryptography has been
+used literally for ages: its first known use dates back to ancient
+Egypt, in 1900 BCE. Almost 2000 years later, Julius Caesar was
+notoriously using cryptography to secure his orders to his generals,
+using what would later be known as a &lt;a href=&quot;https://en.wikipedia.org/wiki/Caesar_cipher&quot;&gt;Caesar
+cipher&lt;/a&gt;, which consists
+in replacing each letter by another one such that the &lt;em&gt;i&lt;/em&gt;-th letter of
+the alphabet is replaced by the (&lt;em&gt;n&lt;/em&gt;+&lt;em&gt;i&lt;/em&gt;)-th one (for some fixed &lt;em&gt;n&lt;/em&gt;
+between 1 and 25). Throughout history, the military would continue to
+use cryptography to protect their communications, with the famous
+example of &lt;a href=&quot;https://en.wikipedia.org/wiki/Enigma_machine&quot;&gt;Enigma&lt;/a&gt;,
+used by Nazi Germany during World War II. Nowadays, in our
+increasingly digital and ever more connected world, cryptography is
+omnipresent, for instance to store sensitive data (&lt;em&gt;eg.&lt;/em&gt; passwords,
+banking data, …), to secure data transfers over the Internet or more
+generally to protect any confidential data. Those different
+applications have different requirements, which are met thanks to
+various &lt;a href=&quot;https://en.wikipedia.org/wiki/Cryptographic_protocol&quot;&gt;&lt;em&gt;cryptographic
+protocols&lt;/em&gt;&lt;/a&gt;
+describing how to use certain &lt;a href=&quot;https://en.wikipedia.org/wiki/Cryptographic_primitive&quot;&gt;&lt;em&gt;cryptographic
+primitives&lt;/em&gt;&lt;/a&gt;
+(&lt;em&gt;ie.&lt;/em&gt;, basic blocks for cryptography, like ciphers) to secure
+communications in a given set of circumstances. Examples of
+cryptographic protocols include
+&lt;a href=&quot;https://en.wikipedia.org/wiki/Transport_Layer_Security&quot;&gt;TLS/SSL&lt;/a&gt;, to
+secure network communications, or the lower-level
+&lt;a href=&quot;https://en.wikipedia.org/wiki/IPsec&quot;&gt;IPsec&lt;/a&gt;, both using cryptographic
+primitives likes the &lt;a href=&quot;https://en.wikipedia.org/wiki/Advanced_Encryption_Standard&quot;&gt;Advanced Encryption
+Standard&lt;/a&gt;
+(AES) and
+&lt;a href=&quot;https://en.wikipedia.org/wiki/Salsa20#ChaCha_variant&quot;&gt;Chacha20&lt;/a&gt;
+[29]. Other examples of cryptographic primitives include the now
+outdated &lt;a href=&quot;https://en.wikipedia.org/wiki/Data_Encryption_Standard&quot;&gt;Data Encryption
+Standard&lt;/a&gt;
+(DES), and &lt;a href=&quot;https://en.wikipedia.org/wiki/RSA_(cryptosystem)&quot;&gt;RSA&lt;/a&gt;
+(used in TLS but not in IPsec).&lt;/p&gt;
 
-&lt;p&gt;Je suis assez exigeant sur ces caractéristiques, parce qu’à chaque donnée ou chaque critère que j’ajoute, la complexité du classement s’accroit. Et le gain est généralement marginal, il me faut donc être vigilant pour ne pas aboutir à un classement incompréhensible, plein de particularités et difficile à comprendre dans son ensemble.&lt;/p&gt;
+&lt;!--
+Cryptanalysis - side-channel attacks
+ - definition cryptanalysis
+ - example breaking Ceasar cipher
+ - more advanced attacks
+   + Related-key attack
+   + Chosen-plaintext attack
+ - secure if no reasonable attacks
+ - side-channel attacks
+   + timing attack (+ code example)
+   + advanced attacks based on hardware
+     * cache-timing attack
+       - example of lookup table &amp; circuit to compute it
+     * power-based attack
+       - code example of protecting previous lookup table
+ -&gt; protections increase code complexity
+ -&gt; hard to do by hand
+ -&gt; (next paragraph) Usuba!
+ --&gt;
+&lt;p&gt;While ciphers became more sophisticated,
+&lt;a href=&quot;https://en.wikipedia.org/wiki/Cryptanalysis&quot;&gt;&lt;em&gt;cryptanalysis&lt;/em&gt;&lt;/a&gt;, the
+study of breaking ciphers became more sophisticated as
+well. Cryptanalysis focuses on finding algorithmic weaknesses in
+cryptographic primitives. For instance, the Caesar cipher, presented
+above, is easily broken by trying to shift all letters of the
+ciphertext by every possible &lt;em&gt;n&lt;/em&gt; (between 1 and 25) until it produces
+a text that makes sense. Examples of more advanced attacks include
+&lt;a href=&quot;https://en.wikipedia.org/wiki/Related-key_attack&quot;&gt;Related-key
+attack&lt;/a&gt;, which
+consist in observing similarities in the ciphertext produced by a
+cipher for a given plaintext with different keys, or &lt;a href=&quot;https://en.wikipedia.org/wiki/Chosen-plaintext_attack&quot;&gt;Chosen-plaintext
+attack&lt;/a&gt;, where
+an attacker will have access to a set of plaintext and corresponding
+ciphertext and will try to retrieve the key. A cipher will typically
+be considered secure if no practical attacks exists, that is, no
+attack that can be carried out in a reasonable time (&lt;em&gt;eg.&lt;/em&gt; tens of
+thousands of years), or set up at a reasonable cost (&lt;em&gt;eg.&lt;/em&gt; billions of
+dollars). However, even when crytanalysis fails to break a cipher, its
+implementation might be vulnerable to &lt;a href=&quot;https://en.wikipedia.org/wiki/Side-channel_attack&quot;&gt;&lt;em&gt;side-channel
+attacks&lt;/em&gt;&lt;/a&gt;, which
+rely on monitoring a cipher execution in order to recover secret
+data. A typical example is &lt;em&gt;timing attacks&lt;/em&gt;: when a cipher uses a
+condition on a secret data, the execution time will vary depending on
+this data. For instance, consider the following C code that checks if
+a provided password matches an expected password:&lt;/p&gt;
 
-&lt;p&gt;C’est la suggestion d’un admirateur Niçois qui m’a plût - “admirateur” est peut-être un mot un peu fort, mais il n’y a pas de commentaires sur ce blog, personne ne pourra se plaindre ! Cette suggestion, c’est d’intégrer le nombre d’associations dans l’animation. C’est une excellente idée ! Les associations peuvent être sportives, culturelles, associatives… Elles sont clairement un reflet de l’implication des citoyens dans la vie de leur communauté.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-C&quot;&gt;int check_password(char* provided, char* expected, int length) {
+    for (int i = 0; i &amp;lt; length; i++) {
+        if (provided[i] != expected[i]) {
+            return 0;
+        }
+    }
+    return 1;
+}
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Je me léchais les babines. J’avais hâte. Je cours sur internet, je trouve le RNA, le Registre National des Associations, qui propose deux fichiers en ligne, contenant l’ensemble des associations françaises. J’intègre la donnée à mon classement. Tout se passe bien…. Puis je remarque une erreur bizare sur quelques villes. En particulier, sur Mulhouse et Strasbourg.&lt;/p&gt;
+&lt;p&gt;If &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;provided&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;expected&lt;/code&gt; start with different characters, then
+this function will quickly return 0. However, if &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;provided&lt;/code&gt; and
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;expected&lt;/code&gt; start with the same 10 characters, then this function will
+loop ten times (and therefore will take longer) before returning 0,
+thus informing an attacker monitoring the execution time of this
+function that he has the first characters right. An easy fix to this
+issue would be to make this function &lt;em&gt;constant-time&lt;/em&gt;, by decorrelating
+its execution time from its inputs:&lt;/p&gt;
 
-&lt;p&gt;Boudiou ! Encore la faute à ces andouilles de teutons. L’alsace et la moselle étaient Allemandes lors de l’entrée en vigueur de la loi sur les associations de 1901. Déception, pleurs, tristesse. Et voilà comment l’héritage historique de l’Est français a pourri mon week-end.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-C&quot;&gt;int check_password(char* provided, char* expected, int length) {
+    int flag = 1;
+    for (int i = 0; i &amp;lt; length; i++) {
+        if (provided[i] != expected[i]) {
+            flag = 0;
+        }
+    }
+    return flag;
+}
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Je n’en reste pas moins déterminé à améliorer chacune des notes que j’attribue à nos villes françaises. Si vous avez des idées, n’hésitez pas à m’en faire part ! Et si possible, vérifiez d’abord que la donnée est disponible en Alsace Moselle, merci !&lt;/p&gt;
+&lt;p&gt;More advanced attacks can be designed, especially on complex
+hardwares. For instance, the time needed to read some data from memory
+on a modern Intel computer heavily depends on whether those data are
+in the caches. An attacker could therefore design a timing attack
+based on the cache access pattern, also called &lt;em&gt;cache-timing
+attack&lt;/em&gt;. Even more sophisticated, &lt;a href=&quot;https://en.wikipedia.org/wiki/Power_analysis&quot;&gt;&lt;em&gt;Power
+analysis&lt;/em&gt;&lt;/a&gt; allows an
+attacker monitoring the power consumption of a device (using typically
+an oscilloscope) to gain knowledge of secret data, possibly while
+&lt;a href=&quot;https://en.wikipedia.org/wiki/Fault_injection&quot;&gt;injecting faults&lt;/a&gt; in
+the computation (using for instance electromagnetic impulsion, or
+lasers) to better control what data is leaked.&lt;/p&gt;
 
-&lt;p&gt;&lt;a name=&quot;footnote1&quot; onclick=&quot;goBack()&quot; href=&quot;#&quot;&gt;[1]&lt;/a&gt;: Footnote content goes here&lt;/p&gt;</content><author><name>Hector</name></author><summary type="html">Comme tous les mois, la mise à jour de Février amène quelques changements à la méthodologie du classement et aux données de base ! Mise à jour des loyers Le premier changement est l’habituelle mise à jour des prix des loyers, grâces aux données récoltées pendant le mois précédent. Cette mise à jour de nos données n’a pas fait bouger le classement d’un poil, signe que nos données commencent à être de plus en plus fiables. Il faudra peut-être commencer à ne prendre en considération que le prix des loyers sur les 6 derniers mois, afin de renforcer la fiabilité de la donnée, et permettre au classement de s’adapter aux conditions réelles. Mais réservons ce changement pour de prochains mois, voire pour la fin de l’année 2019… Il se pourrait en effet que mes scrappers n’indiquent pas la date de publication des annonces immobilières, et ne mentionnent pas non plus dans le format de sortie la date à laquelle la donnée a été identifiée… A suivre !</summary></entry><entry xml:lang="fr"><title type="html">Update February 2019</title><link href="http://localhost:4000/usuba-crypto/2019/02/11/update-february-2019.html" rel="alternate" type="text/html" title="Update February 2019" /><published>2019-02-11T00:00:00+01:00</published><updated>2019-02-11T00:00:00+01:00</updated><id>http://localhost:4000/usuba-crypto/2019/02/11/update-february-2019</id><content type="html" xml:base="http://localhost:4000/usuba-crypto/2019/02/11/update-february-2019.html">&lt;p&gt;Just as every month, the update of february brings new changes to the ranking methodology and data!&lt;/p&gt;
+&lt;p&gt;Primitive implementations must be manually protected against
+side-channel attacks using various techniques. For instance, the
+common defense against cache-timing attacks consists in replacing
+lookup tables by bitwise instructions. Take the following lookup table
+for example:&lt;/p&gt;
 
-&lt;h2 id=&quot;rents-update&quot;&gt;Rents Update&lt;/h2&gt;
+&lt;pre&gt;&lt;code class=&quot;language-C&quot;&gt;int table[4] = { 0, 2, 1, 3 };
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;The first update concerns the price of the rent, thanks to new data gathered during the previous month. This update of our data has not buldged the ranking by a single bit, which shows that our data start being quite reliable.&lt;/p&gt;
+&lt;p&gt;which is indexed by 2 bits (since it has 4 elements) can be computed
+by the following code (provided that each bit of the 2-bit input has
+been put in a different variable &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x0&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x1&lt;/code&gt;, and that the 2-bit
+output is expected to be in two variables &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;r0&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;r1&lt;/code&gt;):&lt;/p&gt;
 
-&lt;p&gt;We may want to start forgetting old rent data, say, prices older than 6 months, which would allow the ranking to be more flexible, and adapt to actual rent prices and changes in prices. But this is a change for another month. I’ll probably leave it to the second half of 2019, as for now, my scrapper does not gather some key data such as the publication date of the posts, neither does it include the date on which the data was found in its output format. I’ll make sure to add that in the future, and we’ll be able to make the rent updates more interesting!&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-C&quot;&gt;void table(bool x0, bool x1, bool* r0, bool* r1) {
+    *r0 = x1;
+    *r1 = x0 | x1;
+}
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;!--more--&gt;
-&lt;h2 id=&quot;groceries-prices&quot;&gt;Groceries Prices&lt;/h2&gt;
+&lt;p&gt;For instance, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;table[1]&lt;/code&gt; is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2&lt;/code&gt;, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;1&lt;/code&gt; in binary is &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;01&lt;/code&gt;. Calling
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;table()&lt;/code&gt; with &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x0 = 0&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x1 = 1&lt;/code&gt; produces &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;r0 = 1&lt;/code&gt; and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;r1 = 0&lt;/code&gt;,
+or &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;10&lt;/code&gt;, which is binary for &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;2&lt;/code&gt;. Another technique to protect
+primitive implementations is &lt;em&gt;boolean masking&lt;/em&gt;, which aims at
+mitigating Power analysis attacks. It consists in representing each
+bit &lt;em&gt;b&lt;/em&gt; of secret data by &lt;em&gt;n&lt;/em&gt; random bits such that their xor is equal
+to the original secret bit: &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;b = b0 ^ b1 ^ ... ^ bn&lt;/code&gt; for each secret
+bit &lt;em&gt;b&lt;/em&gt;. If &lt;em&gt;n&lt;/em&gt; is greater than 2, this is called &lt;em&gt;higher order
+boolean masking&lt;/em&gt;. Adding this protection to the function &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;table&lt;/code&gt;
+introduced above would produce the following code:&lt;/p&gt;
 
-&lt;p&gt;Quite by accident, I found a nice map of France showing the average groceries prices for each department. The basket of goods purchased in each department and cities goes from 350€ to 415€. Of course, it’s dependent on each brand of supermarket, and where precisely the supermarket is located. Nevertheless, I think that it is a nice touch to add.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-C&quot;&gt;void table(bool x0[n], bool x1[n], bool r0[n], bool r1[n]) {
+    for (int i = 0; i &amp;lt; n; i++) {
+        r0[i] = x1[i];
+    }
+    r1 = OR(x0, x1);
+}
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;It also allowed me to simplify quite efficiently the rent rating, which is now more linear and consistent with the other ratings (it uses quintiles instead of a more complex formula before).&lt;/p&gt;
+&lt;p&gt;where &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;OR&lt;/code&gt; is a function computing a bitwise &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;or&lt;/code&gt; between two masked
+data. Already, our initially simple lookup table is becoming quite
+complicated, and a developper looking at the code would have a hard
+time figuring out what it does. Applying the same techniques to a full
+cipher would take a considerable amount of time and produce a much
+more complex code. Most -if not all- the times, manually implementing
+high-throughput cryptographic primitives, and manually securing
+primitives against side-channel attacks are two complicated and
+tedious taks, hard to get right, and which tends to obfuscate the
+code, thus complicating any further maintenance. Doing both at the
+same time is an even harder task, reaching the limits of what one can
+do by hand.&lt;/p&gt;
 
-&lt;h2 id=&quot;a-new-data-in-february&quot;&gt;A new data in February?&lt;/h2&gt;
+&lt;!--
+Presentation of Usuba
+ - programming language for crypto
+ - addresses the 3 points above:
+   - high-level -&gt; obviously correct, easy to reason on
+   - constant-time + countermeasures -&gt; security
+   - high-perf C + intrinsics -&gt; fast
+--&gt;
 
-&lt;p&gt;Third major update this month… A failed attempt. That’s said. You know, I’m always looking for new criterias to improve my ranking, but I’m very rigorous. If you suggest a crieria to me, I’ll have to make sure that it does comply with several characteristics :&lt;/p&gt;
-&lt;ul&gt;
-  &lt;li&gt;It must be one-sided, in that it must be cristal-clear and unchallengeable whether a value of that criteria indicates a positive or a negative. That’s not always as obvious as we may like. For example, I hesitated in the past to integrate the number of policemen as part of the security rating. But, is it good or bad to have a lot of policemen ? When there is a high number of policemen, is it a sign of an increased public safety, or is it a sign that there is a strong rampant criminality ? That’s clearly not obvious, and we might be able to find cases supporting both of these hypotheses. Conclusion: the number of policemen is not a good indicator of public safety.&lt;/li&gt;
-  &lt;li&gt;The data must be available online, and accessible without cost, and without too much trouble. Ideally, it takes the form of a database, or another structured dataset. I can parse a website, download files, etc. I can even gather the data by hand if I’m really convinced that it’s a great data. That’s an hour of my time for the 250 cities, I can usually handle that, provided I don’t need to repeat that every month.&lt;/li&gt;
-  &lt;li&gt;THe data muse be available throughout all the french cities. If I can’t rate some cities, how could we end up with an objective ranking at national level? (we couldn’t)&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;Instead, we propose &lt;strong&gt;Usuba&lt;/strong&gt; [5,6,7], a domain-specific programming
+language designed to write cryptographic primitives, developed by
+Darius Mercadier and (and under the supervision of) Pierre-Evariste
+Dagand. Usuba is a high-level programming language, making it easy to
+reason on programs (and therefore assert of their correctness). Usuba
+is constant-time by construction, thus protecting against cache-timing
+attacks, and can automatically insert countermeasures like boolean
+masking to protect against power-based side-channels. Finally, Usuba
+compiles to high-performance C code, exploiting SIMD extensions of
+modern CPUs when available (SSE, AVX, AVX512 on Intel, Neon on ARM,
+AltiVec on PowerPC), thus performing on par with hand-tuned code in a
+lot of cases, sometimes even better.&lt;/p&gt;
 
-&lt;p&gt;I am quite demanding and strict on these caracteristics, because for every new data or new criteria I add to the ranking, its complexity improves. The gain is usually marginal, and I must therefore be careful not to obfuscate the ranking, making it full of particularities, obscure criterias, and overall, complex and hard to undersand as a whole.&lt;/p&gt;
+&lt;!--
+Blockciphers in Usuba
+ - blockcipher: n rounds of ``stuffs''
+   - blockipher == software circuit
+   - usuba: high-level circuits
+ - Example: Rectangle \cite{zhang:rectangle}
+   - circuit (taken from PLDI slides)
+   - Usuba code == straight translation
+ - obvious what it does
+   + still, explain what each function does
+ - 10-15% faster than reference
+ - more generic and high-level than reference
+--&gt;
 
-&lt;p&gt;A few days ago, an admirer from Nice made an interesting suggestion. Well, I’m not sure that “admirer” is the best description for that nice guy, but he can’t complain, there’s no comments on this blog, ha! Anyways, his suggestion was to take into account the number of associations as part of the “life” rating. It’s a great idea ! Associations and clubs can be about sports, arts, culture, community. They typically show how much citizens are actively involved in the life of their communities.&lt;/p&gt;
+&lt;p&gt;A blockcipher is typically defined as &lt;em&gt;n&lt;/em&gt; rounds of computation, each
+of them doing the same thing, and taking the output of the previous
+round as well as (most of the times) a key as input. The number of
+round is fixed for a given cipher, and the operations done within a
+round are typically bit-permutations, bitwise operations, and
+sometimes arithmetic operations. A cipher can therefore be seen as a
+stateless circuit. For instance, the Rectangle [13] blockcipher takes
+a 64-bit plaintext, and 25 64-bit keys as input, and produces the
+ciphertext through 24 rounds, each doing a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;xor&lt;/code&gt;, and calling two
+auxiliary functions: SubColumn (a lookup table, which provides
+non-linearity), and ShiftRows (a permutation, which provides
+diffusion). Rectangle can therefore be represented by the following
+circuit:&lt;/p&gt;
 
-&lt;p&gt;I was so happy. I was looking forward to integrating that new idea. I ran to a computer, found the “RNA”, the french “Registre National des Associations”, which offers two files online, with ALL of the french associations. It includes the postal codes, perfect! Everything is going fine, untill I notice an error on my spreadsheet. A few cities show no data… Strenge, strange…. In particular, I’ve got nothing on Mulhouse and Strasbourd.&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;/usuba-crypto/assets/images/blog/rectangle-circuit.png&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
 
-&lt;p&gt;Holy cow! The sausage-eating germans striked again. I curse Bismark and his minions. Why, why, why is a french defeat almost 150 years old still haunting me? Because of the mean germans, Alsace and Moselle were indeed not French between 1870 and 1918. I can’t say I’m happy about that, but on the principle, I don’t care so much. What I really care about is that the law on associations in France was signed in 1901, meaning it does not apply to Alsace and Moselle….&lt;/p&gt;
+&lt;p&gt;Usuba aims at providing a way to write an implementation of a cipher
+which is as close to the specification (&lt;em&gt;ie.&lt;/em&gt; the circuit) as
+possible. As such, Rectangle can be straight-forwardly written in
+Usuba in just a few lines of code (explanations below):&lt;/p&gt;
 
-&lt;p&gt;And here goes my brilliant criteria. Whooosh! flush down the toilets, all because of second-best ennemy of France. Loosing again to a second.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-Usuba&quot;&gt;table SubColumn (in:v4) returns (out:v4) {
+    6 , 5, 12, 10, 1, 14, 7, 9,
+    11, 0, 3 , 13, 8, 15, 4, 2
+}
 
-&lt;p&gt;That’s probably anough of a rant, I feel much better now! but nothing is forgiven yet, you Lager Beer drinkers! Anyways, I’m still and always open to new ideas on how to make my ranking better, so feel free to let me know if you have any brilliant idea! But please, make sure that the data is available in Alsace :)&lt;/p&gt;</content><author><name>Hector</name></author><summary type="html">Just as every month, the update of february brings new changes to the ranking methodology and data! Rents Update The first update concerns the price of the rent, thanks to new data gathered during the previous month. This update of our data has not buldged the ranking by a single bit, which shows that our data start being quite reliable. We may want to start forgetting old rent data, say, prices older than 6 months, which would allow the ranking to be more flexible, and adapt to actual rent prices and changes in prices. But this is a change for another month. I’ll probably leave it to the second half of 2019, as for now, my scrapper does not gather some key data such as the publication date of the posts, neither does it include the date on which the data was found in its output format. I’ll make sure to add that in the future, and we’ll be able to make the rent updates more interesting!</summary></entry><entry xml:lang="fr"><title type="html">Remote France en Anglais</title><link href="http://localhost:4000/usuba-crypto/2019/01/06/remote-france-en-anglais.html" rel="alternate" type="text/html" title="Remote France en Anglais" /><published>2019-01-06T00:00:00+01:00</published><updated>2019-01-06T00:00:00+01:00</updated><id>http://localhost:4000/usuba-crypto/2019/01/06/remote-france-en-anglais</id><content type="html" xml:base="http://localhost:4000/usuba-crypto/2019/01/06/remote-france-en-anglais.html">&lt;p&gt;Remote France est maintenant disponible en anglais ! A tous nos amis anglophones : vous pouvez maintenant parcourir notre classement sans soucis, la langue n’est plus un obstacle ni une excuse !&lt;/p&gt;
+node ShiftRows (input:u16[4]) returns (out:u16[4])
+let
+    out[0] = input[0];
+    out[1] = input[1] &amp;lt;&amp;lt;&amp;lt; 1;
+    out[2] = input[2] &amp;lt;&amp;lt;&amp;lt; 12;
+    out[3] = input[3] &amp;lt;&amp;lt;&amp;lt; 13
+tel
 
-&lt;p&gt;Nous vous souhaitons à tous une excellente et productive année 2019 - d’autant plus si vous vous installez dans une des villes que nous recommandons à travers notre classement !&lt;/p&gt;
+node Rectangle (plain:u16[4],key:u16[26][4])
+       returns (cipher:u16[4])
+vars round : u16[26][4]
+let
+    round[0] = plain;
+    forall i in [0,24] {
+        round[i+1] = ShiftRows(SubColumn(round[i] ^ key[i]))
+    }
+    cipher = round[25] ^ key[25]
+tel
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;!--more--&gt;</content><author><name>Hector</name></author><summary type="html">Remote France est maintenant disponible en anglais ! A tous nos amis anglophones : vous pouvez maintenant parcourir notre classement sans soucis, la langue n’est plus un obstacle ni une excuse ! Nous vous souhaitons à tous une excellente et productive année 2019 - d’autant plus si vous vous installez dans une des villes que nous recommandons à travers notre classement !</summary></entry><entry xml:lang="en"><title type="html">Remote France Translated</title><link href="http://localhost:4000/usuba-crypto/2019/01/06/remote-france-translated.html" rel="alternate" type="text/html" title="Remote France Translated" /><published>2019-01-06T00:00:00+01:00</published><updated>2019-01-06T00:00:00+01:00</updated><id>http://localhost:4000/usuba-crypto/2019/01/06/remote-france-translated</id><content type="html" xml:base="http://localhost:4000/usuba-crypto/2019/01/06/remote-france-translated.html">&lt;p&gt;At last! Remote France is available in english. To all our friends who are looking for a new home in France, you can now browse our ranking with ease.&lt;/p&gt;
+&lt;p&gt;An introduction to the syntax will be given in a later post, but even
+without it, the code should be self explanatory: the main function
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;Rectangle&lt;/code&gt; takes a plaintext as an array of 4 16-bit elements, and a
+key as a 2D array, and computes 25 rounds, each calling the functions
+&lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;ShiftRows&lt;/code&gt;, described as 3 left-rotations, and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;SubColumn&lt;/code&gt;, which
+computes a lookup in a table. This code is painfully simple, and as
+close to the specification as one can be. Yet, it compiles to a C code
+which is 10-15% faster than the reference implementation [6], while
+being much simpler and more generic, as the latter explicitly uses
+vector extensions for specific architectures.&lt;/p&gt;
 
-&lt;p&gt;We wish you all a very happy and productive year 2019 - bonus points to you if you settle up in one of our recommended cities!&lt;/p&gt;
+&lt;!--
+Constant-time code
+ - battle against the compiler
+   + compiler may introduce branches (https://people.eecs.berkeley.edu/~daw/papers/pcmodel-long.pdf)
+   + Example:
+       bool f(bool x, bool y, bool z) {
+          return (x &amp; y) | (~x &amp; z);
+       }
+     produces cmove (it's hard to find doc about cmove constant-time or not (cite Dudect?)).
+ - battle against the (micro)architecture
+   + Example: constant-time multiplication (https://www.bearssl.org/ctmul.html)
+ - Dudect: treat primitive as a blackbox
+ - Languages to enforce constant-time:
+   + HACL* but too low-level
+   + FaCT
+ - ( Obtained by construction with bitslicing )
+--&gt;
 
-&lt;!--more--&gt;
+&lt;p&gt;One of the other main benefits of Usuba is that the codes it generates
+are constant-time &lt;em&gt;by construction&lt;/em&gt;. To write constant-time code with
+traditional languages (&lt;em&gt;e.g.&lt;/em&gt;, C) is to fight an uphill battle against
+compilers [22], which may silently rewrite one’s carefully crafted
+program into one vulnerable to timing attacks, and against the
+underlying architecture itself [23], whose micro-architectural
+features may leak secrets through timing or otherwise. For instance,
+the assembly generated by Clang 9.0 for the following C implementation
+of a multiplexer:&lt;/p&gt;
 
-&lt;p&gt;Have fun!&lt;/p&gt;</content><author><name>Hector</name></author><summary type="html">At last! Remote France is available in english. To all our friends who are looking for a new home in France, you can now browse our ranking with ease. We wish you all a very happy and productive year 2019 - bonus points to you if you settle up in one of our recommended cities!</summary></entry><entry xml:lang="fr"><title type="html">Mise à jour de la météo</title><link href="http://localhost:4000/usuba-crypto/2018/12/28/mise-a-jour-meteo.html" rel="alternate" type="text/html" title="Mise à jour de la météo" /><published>2018-12-28T00:00:00+01:00</published><updated>2018-12-28T00:00:00+01:00</updated><id>http://localhost:4000/usuba-crypto/2018/12/28/mise-a-jour-meteo</id><content type="html" xml:base="http://localhost:4000/usuba-crypto/2018/12/28/mise-a-jour-meteo.html">&lt;p&gt;Auparavant, notre indice de météo n’intégrait que deux variables : les précipitations annuelles, ainsi qu’un bonus conféré par l’environement (montagne ou mer). Nous avons renforcé cet indice pour le rendre plus &lt;strong&gt;fiable&lt;/strong&gt;.&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-C&quot;&gt;bool mux(bool x, bool y, bool z) {
+    return (x &amp;amp; y) | (~x &amp;amp; z);
+}
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;p&gt;Nous avons conservé ces deux indicateurs, et ajouté une nouvelle variable : la température moyenne. A précipitations similaires, cela permet de mettre en valeur les villes relativement plus chaudes !&lt;/p&gt;
+&lt;p&gt;uses a &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;cmove&lt;/code&gt; instruction, which is not known to be constant-time
+(even though it seems to be, experimentally). Likewise, some integer
+multiplication instructions are known to not be constant-time, causing
+library developers to write their own software-level constant-time
+implementations of multiplications [25]. The issue is so far-reaching
+that tools traditionally applied to hardware evaluation are now used
+to analyze software implementations [24], treating the program and its
+execution environment as a single black-box and measuring whether its
+execution time seems constant with a high enough probablity. Most -if
+not all- modern programming languages designed for cryptography have
+built-in mechanism to prevent non-constant-time operations. For
+instance, HACL* [26] has the notion of &lt;em&gt;secure integers&lt;/em&gt; that cannot
+be branched on, and forbids the use of non-constant-time operations
+like division or modulo. FaCT [27] on the other hand takes the stance
+that HACL* is too low-level, and that constant-timeness should be seen
+as a compilation problem: it provides high-level abstractions which
+are compiled down to constant-time idioms. Adopting yet another
+high-level approach, Usuba enforces constant-time by using (in a
+transparent manner from the developer’s point-of-vue) a programming
+model called &lt;em&gt;bitslicing&lt;/em&gt;.&lt;/p&gt;
 
-&lt;!--more--&gt;
+&lt;!--
+Bitslicing - overview
+ - origin: biham on DES
+ - change data representation to maximize parallelism
+   -&gt; scales well with SIMD extensions
+ - lots of record-breaking software implem uses bitslicing
+ - modern ciphers designed with bitslicing in mind
+ - tedious to write by hand
+   + example: Kwan
+ - Automatic bitslicing in Usuba
+   + clearer, with better performances
+--&gt;
 
-&lt;p&gt;Par la même occasion, nous avons mis à jour les données de loyer, et fait quelques ajustements pour rendre le calcul de la note de transport plus juste et représentative. L’ancienne méthode était en effet trop complaisante avec des villes isolées mais ayant un aéroport. C’est à présent réglé !&lt;/p&gt;
+&lt;p&gt;Bitslicing was first introduced by Biham [4] as an implementation
+trick to speed up software implementations of DES. Intuitively, the
+idea of bitslicing is to represent a &lt;em&gt;n&lt;/em&gt;-bit data as 1 bit in &lt;em&gt;n&lt;/em&gt;
+registers. Each register therefore has 63-bit empty bit remaining (in
+the case of 64-bit registers), which can be filled in the same fashion
+by other independant data. To manipulate such data, the cipher must be
+reduced to bitwise logic operators such as &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x &amp;amp; y&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x | y&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x ^ y&lt;/code&gt;
+and &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;~ x&lt;/code&gt;. On a 64-bit machine, the bitwise &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;x &amp;amp; y&lt;/code&gt; operation then
+effectively works like 64 parallel Boolean conjunctions, each
+processing a single bit.  High throughput is thus achieved by
+parallelism: 64 instances of the cipher can execute in
+parallel. Bitslicing is thus especially good at exploiting vector
+extensions of moderns CPUs, which offer large registers (&lt;em&gt;eg.&lt;/em&gt; 128-bit
+Neon on ARM, 128-bit AltiVec on PowerPC, and more commonly known,
+128-bit SSE, 256-bit AVX and 512-bit AVX-512 on Intel). Bitsliced
+implementations are constant-time by design: no data-dependent
+conditionals nor memory accesses are made (or, in fact, possible at
+all). Most record-breaking software implementations of block ciphers
+exploit this technique [8,9,10,11], and modern ciphers are now
+designed with bitslicing in mind [12,13]. However, bitslicing usually
+implies an increase in code complexity, making it hard to write
+efficient bitslice code by hand, as can be shown in those few lines of
+C code which are part of a DES implementation written by Matthew Kwan
+[28]:&lt;/p&gt;
 
-&lt;p&gt;Les conséquences de cette mise à jour ont été assez drastiques : Lyon et Bordeau ont sauté tout en haut du classement ! Le top 10 est à présent le suivant :&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&quot;language-C&quot;&gt;s1 (r31 ^ k[47], r0 ^ k[11], r1 ^ k[26], r2 ^ k[3], r3 ^ k[13],
+	r4 ^ k[41], &amp;amp;l8, &amp;amp;l16, &amp;amp;l22, &amp;amp;l30);
+s2 (r3 ^ k[27], r4 ^ k[6], r5 ^ k[54], r6 ^ k[48], r7 ^ k[39],
+	r8 ^ k[19], &amp;amp;l12, &amp;amp;l27, &amp;amp;l1, &amp;amp;l17);
+s3 (r7 ^ k[53], r8 ^ k[25], r9 ^ k[33], r10 ^ k[34], r11 ^ k[17],
+	r12 ^ k[5], &amp;amp;l23, &amp;amp;l15, &amp;amp;l29, &amp;amp;l5);
+s4 (r11 ^ k[4], r12 ^ k[55], r13 ^ k[24], r14 ^ k[32], r15 ^ k[40],
+	r16 ^ k[20], &amp;amp;l25, &amp;amp;l19, &amp;amp;l9, &amp;amp;l0);
+&lt;/code&gt;&lt;/pre&gt;
 
-&lt;ol&gt;
-  &lt;li&gt;Lyon&lt;/li&gt;
-  &lt;li&gt;Bordeau&lt;/li&gt;
-  &lt;li&gt;Nantes&lt;/li&gt;
-  &lt;li&gt;Clermont-Ferrand&lt;/li&gt;
-  &lt;li&gt;Tours&lt;/li&gt;
-  &lt;li&gt;La Rochelle&lt;/li&gt;
-  &lt;li&gt;Narbonne&lt;/li&gt;
-  &lt;li&gt;Nancy&lt;/li&gt;
-  &lt;li&gt;Avignon&lt;/li&gt;
-  &lt;li&gt;Le Mans&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;The &lt;a href=&quot;https://github.com/DadaIsCrazy/usuba/blob/master/ciphers/des/kwan/des.c#L788-L1043&quot;&gt;full
+code&lt;/a&gt;
+goes on like this for almost 300 lines, while the &lt;a href=&quot;https://github.com/DadaIsCrazy/usuba/blob/master/samples/usuba/des.ua#L154-L184&quot;&gt;Usuba
+equivalent&lt;/a&gt;
+is just a few lines of codes, very similar to the Rectangle code shown
+above. The simplicity offered by Usuba does not come at any
+performance cost: both Kwan’s and Usuba’s implementations exhibit
+similar performances, and more generally, Usuba usually performs on
+par with hand-tuned code.&lt;/p&gt;
 
-&lt;p&gt;Bon travail en remote à tous!&lt;/p&gt;
+&lt;!--
+m-slicing
+ - limitations of bitslicing
+ - generalization of bitslicing
+ - bitslicing properties still apply: constant time &amp; masking
+ - solves issues of bitslicing:
+    * lower pressure on registers
+    * smaller code size
+    * less transposition cost
+ - type-directed in Usuba
+--&gt;
 
-&lt;p&gt;Hector&lt;/p&gt;</content><author><name>Hector</name></author><summary type="html">Auparavant, notre indice de météo n’intégrait que deux variables : les précipitations annuelles, ainsi qu’un bonus conféré par l’environement (montagne ou mer). Nous avons renforcé cet indice pour le rendre plus fiable. Nous avons conservé ces deux indicateurs, et ajouté une nouvelle variable : la température moyenne. A précipitations similaires, cela permet de mettre en valeur les villes relativement plus chaudes !</summary></entry><entry xml:lang="en"><title type="html">Weather Update</title><link href="http://localhost:4000/usuba-crypto/2018/12/28/weather-update.html" rel="alternate" type="text/html" title="Weather Update" /><published>2018-12-28T00:00:00+01:00</published><updated>2018-12-28T00:00:00+01:00</updated><id>http://localhost:4000/usuba-crypto/2018/12/28/weather-update</id><content type="html" xml:base="http://localhost:4000/usuba-crypto/2018/12/28/weather-update.html">&lt;p&gt;Before, our weather rating only included 2 variables: annual precipitations, and a bonus given from the location of the city, it is located near the mountains or the sea. We have updated this rating to make it more &lt;strong&gt;reliable&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;The bitslicing model can sometimes be too restrictive as it forbids
+the use of arithmetic operations, and may fails to provide the
+expected performances, due to the high pressures it puts on the
+registers. To overcome those issues, and drawing inspiration from
+Kasper &amp;amp; Schwabe’s byte-sliced AES [11], we propose a generalization
+of bitslicing that we dub &lt;em&gt;m&lt;/em&gt;-slicing. &lt;em&gt;m&lt;/em&gt;-slicing preserves the
+constant-time property of bitslicing, while allowing to use SIMD
+packed arithmetic instructions (&lt;em&gt;eg.&lt;/em&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vpaddb&lt;/code&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vmuldp&lt;/code&gt;), as well as
+vector permutations (&lt;em&gt;eg.&lt;/em&gt;, &lt;code class=&quot;language-plaintext highlighter-rouge&quot;&gt;vpshufb&lt;/code&gt;) to speed up permutations. The
+type of slicing is controlled with Usuba’s type-system, thus not
+inflicting no increase in code complexity: the same code will be
+sliced differently depending on the data’s types.&lt;/p&gt;
 
-&lt;p&gt;We have indeed kept the two pre-existing variables, and we have added a new one: the average temperature. Now, when precipitations are similar, warmer cities rank higher… Which makes a lot of sense!&lt;/p&gt;
+&lt;!--
+Motivate Usuba's usefulness
+ - AES dominates on high-end intel
+ - embedded devices:
+     - no hardware support for AES
+     - cannot even use hardware because too heavy
+     - use lightweight ciphers -&gt; Usuba comes in
+ - new primitives (Chacha, ...) arise on intel
+   - example: Google uses Chacha in TLS
+   - example: WireGuard uses Chacha
+ - automatic protection against side-channel
+--&gt;
 
-&lt;!--more--&gt;
+&lt;p&gt;In an era where almost all high-end CPUs have dedicated hardware to
+run AES, making it almost unbeatable by any software implementation of
+any cipher, one could wonder whether Usuba actually has a role to play
+in modern cryptography. However, a lot of embedded devices do not have
+hardware support for AES, and have stringent requirements regarding
+code size and power consumption, which AES cannot oblige. For such
+devices, lightweight ciphers [14,15,16,17] are being developed as
+cheap alternatives to AES, and can benefit from Usuba. Even on
+high-end CPUs, other ciphers are starting to compete with AES, like
+the Chacha family, used for instance by Google in TLS rather than AES
+[18], and more recently chosen by WireGuard over AES that was used by
+its predecessor, IPsec [19]. Finally, Usuba can automatically generate
+countermeasures against power analysis attacks, which even software
+implementations of AES can benefit from [30].&lt;/p&gt;
 
-&lt;p&gt;We have also seized this opportunity to update the rent data, and made a few adjustements to the Transports rating, in order to make it fairer. The old Transport rating was to complacent to isolated cities which still had an airport. Now, this issue is solved!&lt;/p&gt;
+&lt;!--
+Conclusion: Usuba
+ - high-level language for cryptography
+ - generalized mslicing model
+ - generate efficient C (+ SIMD) code
+ - constant-time by construction
+ - additional countermeasures
+--&gt;
 
-&lt;p&gt;The consequences of this update have been massive - the biggest move since the inception of our rating. The new top 10 cities are now:&lt;/p&gt;
+&lt;p&gt;In a nutshell, Usuba is a a statically-typed vector-based programming
+language for specifying block ciphers. Its programming model makes the
+description of cryptographic algorithms intuitive while its type
+system reconciles the need for abstraction –for code reuse– and
+specialization –giving access to architecture-specific features. Using
+a generalized model of bitslicing, called &lt;em&gt;m&lt;/em&gt;-slicing, Usuba can be
+used to express a wide range of cryptographic primitives. Usuba codes
+are constant-time by design, and thus immune to cache-timing
+attacks. Finally, Usuba can automatically protect primitives against
+power-based side-channel attacks using higher-order boolean masking.&lt;/p&gt;
 
-&lt;ol&gt;
-  &lt;li&gt;Lyon&lt;/li&gt;
-  &lt;li&gt;Bordeau&lt;/li&gt;
-  &lt;li&gt;Nantes&lt;/li&gt;
-  &lt;li&gt;Clermont-Ferrand&lt;/li&gt;
-  &lt;li&gt;Tours&lt;/li&gt;
-  &lt;li&gt;La Rochelle&lt;/li&gt;
-  &lt;li&gt;Narbonne&lt;/li&gt;
-  &lt;li&gt;Nancy&lt;/li&gt;
-  &lt;li&gt;Avignon&lt;/li&gt;
-  &lt;li&gt;Le Mans&lt;/li&gt;
-&lt;/ol&gt;
+&lt;p&gt;¹ Note that we concern ourselves only with implementations of
+primitives, and not the primitives themselves. This means in
+particular that we do not aspire to protect our implementations
+against attacks at the algorithmic level (&lt;em&gt;e.g.&lt;/em&gt; Chosen-Plaintext
+Attacks [1], Related-Key Attacks [2], …). If a primitive is
+vulnerable to such attacks, then so will its implementations be.&lt;/p&gt;
 
-&lt;p&gt;Work well, work remote!&lt;/p&gt;</content><author><name>Hector</name></author><summary type="html">Before, our weather rating only included 2 variables: annual precipitations, and a bonus given from the location of the city, it is located near the mountains or the sea. We have updated this rating to make it more reliable. We have indeed kept the two pre-existing variables, and we have added a new one: the average temperature. Now, when precipitations are similar, warmer cities rank higher… Which makes a lot of sense!</summary></entry><entry xml:lang="fr"><title type="html">Bienvenue sur Remote France !</title><link href="http://localhost:4000/usuba-crypto/2018/12/10/bienvenue-sur-remote-france.html" rel="alternate" type="text/html" title="Bienvenue sur Remote France !" /><published>2018-12-10T00:00:00+01:00</published><updated>2018-12-10T00:00:00+01:00</updated><id>http://localhost:4000/usuba-crypto/2018/12/10/bienvenue-sur-remote-france</id><content type="html" xml:base="http://localhost:4000/usuba-crypto/2018/12/10/bienvenue-sur-remote-france.html">&lt;p&gt;Remote France est l’outil de référence pour choisir où s’installer en France.&lt;/p&gt;
+&lt;hr /&gt;
 
-&lt;p&gt;Nous vous proposons une sélection des meilleures villes de France où s’installer, selon des critères objectifs. Dans un esprit d’ouverture, nous mettons également à disposition notre méthodologie. Il n’y a aucun secret, aucune sauce magique : ces villes méritent objectivement et empiriquement de figurer à leur place dans le classement !&lt;/p&gt;
+&lt;h2 id=&quot;references&quot;&gt;References&lt;/h2&gt;
 
-&lt;!--more--&gt;
+&lt;p&gt;[1] &lt;a href=&quot;https://en.wikipedia.org/wiki/Chosen-plaintext_attack&quot;&gt;Wikipedia: Chosen-plaintext attack&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;La France a toujours été un pays très centralisé. Paris est le coeur de la France, c’est indéniable. Toutefois, la Capitale n’est pas nécessairement l’endroit parfait pour tout le monde. Les loyers y sont chers, le temps maussade. Et, si vous n’aimez pas particulièrement les grandes villes, on peut aller jusqu’à dire que c’est un enfer !&lt;/p&gt;
+&lt;p&gt;[2] &lt;a href=&quot;https://en.wikipedia.org/wiki/Related-key_attack&quot;&gt;Wikipedia: Related-key attack&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;Nous proposons donc des alternatives qui mettent en valeur l’ensemble du territoire français, sans oublier personne. Nous ne faisons aucun choix ou préférentisme pour aucune ville ni aucune région, mais il se trouve que le classement fait souvent remonter des villes de différentes régions : de l’Auvergne-Rhône-Alpes (Lyon) à la Bretagne (Rennes) en passant par le Grand Est (Nancy), la Nouvelle Aquitaine (Bordeau), ou encore l’Occitanie (Narbonne) et le Centre-Val de Loire (Tours).&lt;/p&gt;
+&lt;p&gt;[3] D. J. Bernstein, &lt;a href=&quot;https://cr.yp.to/antiforgery/cachetiming-20050414.pdf&quot;&gt;Cache-timing attacks on AES&lt;/a&gt;, 2005.&lt;/p&gt;
 
-&lt;p&gt;Ce classement est une occasion pour nous tous de découvrir plus en profondeurs les différentes régions!&lt;/p&gt;</content><author><name>Hector</name></author><summary type="html">Remote France est l’outil de référence pour choisir où s’installer en France. Nous vous proposons une sélection des meilleures villes de France où s’installer, selon des critères objectifs. Dans un esprit d’ouverture, nous mettons également à disposition notre méthodologie. Il n’y a aucun secret, aucune sauce magique : ces villes méritent objectivement et empiriquement de figurer à leur place dans le classement !</summary></entry><entry xml:lang="en"><title type="html">Welcome to Remote France !</title><link href="http://localhost:4000/usuba-crypto/2018/12/10/welcome-to-remote-france.html" rel="alternate" type="text/html" title="Welcome to Remote France !" /><published>2018-12-10T00:00:00+01:00</published><updated>2018-12-10T00:00:00+01:00</updated><id>http://localhost:4000/usuba-crypto/2018/12/10/welcome-to-remote-france</id><content type="html" xml:base="http://localhost:4000/usuba-crypto/2018/12/10/welcome-to-remote-france.html">&lt;p&gt;Remote France is the best tool to choose the ideal french city for you to work &amp;amp; live.&lt;/p&gt;
+&lt;p&gt;[4] E. Biham, &lt;a href=&quot;http://www.cs.technion.ac.il/users/wwwb/cgi-bin/tr-get.cgi/1997/CS/CS0891.pdf&quot;&gt;A fast new DES implementation in software&lt;/a&gt;, FSE, 1997.&lt;/p&gt;
 
-&lt;p&gt;We provide a comprehensive list of the best french cities according to objective criteria. In a spirit of openness, we give you access to our methodology. There’s no secret : the cities in our ranking are objectively and empirically the best, and all deserve precisely their place in the ranking!&lt;/p&gt;
+&lt;p&gt;[5] D. Mercadier &lt;em&gt;et al&lt;/em&gt;, &lt;a href=&quot;Usuba, Optimizing &amp;amp; Trustworthy Bitslicing Compiler&quot;&gt;Usuba, Optimizing &amp;amp; Trustworthy Bitslicing Compiler&lt;/a&gt;, WPMVP, 2018.&lt;/p&gt;
 
-&lt;!--more--&gt;
+&lt;p&gt;[6] D. Mercadier, Pierre-Evariste Dagand, &lt;a href=&quot;https://dariusmercadier.com/assets/documents/usuba-pldi19.pdf&quot;&gt;Usuba: High-Throughput and Constant-Time Ciphers, by Construction&lt;/a&gt;, PLDI, 2019.&lt;/p&gt;
 
-&lt;p&gt;France has always been a very centralized country. Paris is indeed the heart of the country, this cannot be denied. However, the Capital city is not necessarly the perfect place for everyone. Rents are very expensive, the weather is not great. And, if you don’t like big cities, it is fair to say that it is a Hell!&lt;/p&gt;
+&lt;p&gt;[7] &lt;a href=&quot;https://github.com/DadaIsCrazy/usuba&quot;&gt;Github Usuba&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;We offer alternatives which highlight the strenghts of the whole french territory, without omitting any location. We do not apply any bonus to any city or region. We remain strictly objective. But it so happens that our ranking brings up cities from a lot of french regions : from Auvergne-Rhône-Alpes (Lyon) to Bretagne (Rennes), Grand Est (Nancy), Nouvelle Aquitaine (Bordeau), or Occitanie (Narbonne) and Centre-Val de Loire (Tours).&lt;/p&gt;
+&lt;p&gt;[8] Z. Bao &lt;em&gt;et al&lt;/em&gt;, &lt;a href=&quot;https://eprint.iacr.org/2015/1118.pdf&quot;&gt;Bitsliced Implementations of the PRINCE, LED and RECTANGLE Block Ciphers on AVR 8-bit Microcontrollers&lt;/a&gt;, ICICS, 2015.&lt;/p&gt;
 
-&lt;p&gt;This ranking is an opportunity for all of us to discover in depth the treasures of the various french regions!&lt;/p&gt;</content><author><name>Hector</name></author><summary type="html">Remote France is the best tool to choose the ideal french city for you to work &amp;amp; live. We provide a comprehensive list of the best french cities according to objective criteria. In a spirit of openness, we give you access to our methodology. There’s no secret : the cities in our ranking are objectively and empirically the best, and all deserve precisely their place in the ranking!</summary></entry></feed>
+&lt;p&gt;[9] M. Matsui &lt;em&gt;et al&lt;/em&gt;, &lt;a href=&quot;https://www.iacr.org/archive/ches2007/47270121/47270121.ps&quot;&gt;On the Power of Bitslice Implementation on Intel Core2 Processor&lt;/a&gt;, CHES, 2007.&lt;/p&gt;
+
+&lt;p&gt;[10] R. Könighofer, A Fast and Cache-Timing Resistant Implementation of the AES, CT-RSA, 2008.&lt;/p&gt;
+
+&lt;p&gt;[11] E. Käsper, P. Schwabe, &lt;a href=&quot;https://www.esat.kuleuven.be/cosic/publications/article-1261.pdf&quot;&gt;Faster and Timing-Attack Resistant AES-GCM&lt;/a&gt;, CHES, 2009.&lt;/p&gt;
+
+&lt;p&gt;[12] R. Anderson &lt;em&gt;et al&lt;/em&gt;, &lt;a href=&quot;https://www.cl.cam.ac.uk/~rja14/Papers/serpent0.pdf&quot;&gt;Serpent: A New Block Cipher Proposal&lt;/a&gt;, FSE, 1998.&lt;/p&gt;
+
+&lt;p&gt;[13] W. Zhang &lt;em&gt;et al&lt;/em&gt;, &lt;a href=&quot;https://eprint.iacr.org/2014/084.pdf&quot;&gt;RECTANGLE: A Bit-slice Lightweight Block Cipher Suitable for Multiple Platforms&lt;/a&gt;, 2014.&lt;/p&gt;
+
+&lt;p&gt;[14] S. Banik &lt;em&gt;et al&lt;/em&gt;, &lt;a href=&quot;https://eprint.iacr.org/2017/622.pdf&quot;&gt;GIFT: A Small Present - Towards Reaching the Limit of Lightweight Encryption&lt;/a&gt;, CHES, 2017.&lt;/p&gt;
+
+&lt;p&gt;[15] A. Baysal, S. Sahin, &lt;a href=&quot;https://eprint.iacr.org/2015/906&quot;&gt;RoadRunneR: A Small And Fast Bitslice Block Cipher For Low Cost 8-bit Processors&lt;/a&gt;, LightSec, 2015.&lt;/p&gt;
+
+&lt;p&gt;[16] A. Bogdanov &lt;em&gt;et al&lt;/em&gt;, &lt;a href=&quot;http://www.lightweightcrypto.org/present/present_ches2007.pdf&quot;&gt;PRESENT: An Ultra-Lightweight Block Cipher&lt;/a&gt;, CHES, 2007.&lt;/p&gt;
+
+&lt;p&gt;[17] V. Grosso &lt;em&gt;et al&lt;/em&gt;, &lt;a href=&quot;https://hal.inria.fr/hal-01093491/document&quot;&gt;LS-Designs: Bitslice Encryption for Efficient MaskedSoftware Implementations&lt;/a&gt;, FSE, 2014.&lt;/p&gt;
+
+&lt;p&gt;[18] E. Bursztein, &lt;a href=&quot;https://security.googleblog.com/2014/04/speeding-up-and-strengthening-https.html&quot;&gt;Speeding up and strengthening HTTPS connections for Chrome on Android&lt;/a&gt;, 2014, accessed 20/11/2019.&lt;/p&gt;
+
+&lt;p&gt;[19] J. A. Donenfeld, &lt;a href=&quot;https://www.wireguard.com/papers/wireguard.pdf&quot;&gt;WireGuard: Next Generation Kernel Network Tunnel&lt;/a&gt;, 2019.&lt;/p&gt;
+
+&lt;p&gt;[20] G. Barthe, &lt;a href=&quot;https://ieeexplore.ieee.org/document/7310828&quot;&gt;High-Assurance Cryptography: Cryptographyic Software We Can Trust&lt;/a&gt;, 2015.&lt;/p&gt;
+
+&lt;p&gt;[21] K. Bhargavan &lt;em&gt;et al&lt;/em&gt;, &lt;a href=&quot;http://drops.dagstuhl.de/opus/volltexte/2017/7119/pdf/LIPIcs-SNAPL-2017-1.pdf&quot;&gt;Everest: Towards a Verified, Drop-in Replacement of HTTPS&lt;/a&gt;, 2017.&lt;/p&gt;
+
+&lt;p&gt;[22] G. Balakrishnan, T. Reps, &lt;a href=&quot;https://research.cs.wisc.edu/wpis/papers/wysinwyx.final.pdf&quot;&gt;WYSINWYX: What You See Is Not What You eXecute&lt;/a&gt;, 2005.&lt;/p&gt;
+
+&lt;p&gt;[23] A. Moghimi &lt;em&gt;et al&lt;/em&gt;, &lt;a href=&quot;https://arxiv.org/pdf/1711.08002.pdf&quot;&gt;MemJam: A False Dependency Attack againstConstant-Time Crypto Implementations&lt;/a&gt;, 2017.&lt;/p&gt;
+
+&lt;p&gt;[24] O. Reparaz &lt;em&gt;et al&lt;/em&gt;, &lt;a href=&quot;https://eprint.iacr.org/2016/1123.pdf&quot;&gt;Dude, is my code constant time?&lt;/a&gt;, 2016.&lt;/p&gt;
+
+&lt;p&gt;[25] T. Pornin, &lt;a href=&quot;https://www.bearssl.org/ctmul.html&quot;&gt;Constant-time mul&lt;/a&gt;, accessed 12/2019.&lt;/p&gt;
+
+&lt;p&gt;[26] J.-K. Zinzindohoué &lt;em&gt;et al&lt;/em&gt;, &lt;a href=&quot;https://hal.inria.fr/hal-01588421v2/document&quot;&gt;HACL*, A Verified Modern Crytographic Library&lt;/a&gt;, 2017.&lt;/p&gt;
+
+&lt;p&gt;[27] S. Cauligi &lt;em&gt;et al&lt;/em&gt;, &lt;a href=&quot;https://cseweb.ucsd.edu/~dstefan/pubs/cauligi:2017:fact.pdf&quot;&gt;FaCT: A Flexible, Constant-Time Programming Language&lt;/a&gt;, 2017.&lt;/p&gt;
+
+&lt;p&gt;[28] M. Kwan, &lt;a href=&quot;http://www.darkside.com.au/bitslice/&quot;&gt;Bitslice DES&lt;/a&gt;, accessed 2019-01-04.&lt;/p&gt;
+
+&lt;p&gt;[29] D. J. Bernstein, &lt;a href=&quot;https://cr.yp.to/chacha/chacha-20080128.pdf&quot;&gt;Chacha, a variant of Salsa20&lt;/a&gt;, 2008.&lt;/p&gt;
+
+&lt;p&gt;[30] P. Kiaei &lt;em&gt;et al&lt;/em&gt;, &lt;a href=&quot;https://eprint.iacr.org/eprint-bin/cite.pl?entry=2019/756&quot;&gt;SKIVA: Flexible and Modular Side-channel and Fault Countermeasures&lt;/a&gt;, 2019.&lt;/p&gt;</content><author><name>Darius Mercadier</name></author><summary type="html">Usuba is a high-level domain-specific programming language for cryptography , making it easy to reason on programs (and therefore assert of their correctness). Usuba is constant-time by construction, thus protecting against cache-timing attacks, and can automatically insert countermeasures like boolean masking to protect against power-based side-channels. Finally, Usuba compiles to high-performance C code, exploiting SIMD extensions of modern CPUs when available (SSE, AVX, AVX512 on Intel, Neon on ARM, AltiVec on PowerPC)</summary></entry></feed>
