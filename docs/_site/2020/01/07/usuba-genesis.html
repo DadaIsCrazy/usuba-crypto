@@ -9,6 +9,8 @@
 <title>Usuba - the genesis</title>
 <meta name="description" content="Usuba website" />
 <link rel="stylesheet" href="/usuba-crypto/css/main.css">
+<link rel="stylesheet" href="/usuba-crypto/css/syntax.css">
+
 
   <body>
 
@@ -195,15 +197,15 @@ condition on a secret data, the execution time will vary depending on
 this data. For instance, consider the following C code that checks if
 a provided password matches an expected password:</p>
 
-<pre><code class="language-C">int check_password(char* provided, char* expected, int length) {
-    for (int i = 0; i &lt; length; i++) {
-        if (provided[i] != expected[i]) {
-            return 0;
-        }
-    }
-    return 1;
-}
-</code></pre>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">check_password</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">provided</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">expected</span><span class="p">,</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">provided</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+            <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <p>If <code class="language-plaintext highlighter-rouge">provided</code> and <code class="language-plaintext highlighter-rouge">expected</code> start with different characters, then
 this function will quickly return 0. However, if <code class="language-plaintext highlighter-rouge">provided</code> and
@@ -214,16 +216,16 @@ function that he has the first characters right. An easy fix to this
 issue would be to make this function <em>constant-time</em>, by decorrelating
 its execution time from its inputs:</p>
 
-<pre><code class="language-C">int check_password(char* provided, char* expected, int length) {
-    int flag = 1;
-    for (int i = 0; i &lt; length; i++) {
-        if (provided[i] != expected[i]) {
-            flag = 0;
-        }
-    }
-    return flag;
-}
-</code></pre>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="nf">check_password</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">provided</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">expected</span><span class="p">,</span> <span class="kt">int</span> <span class="n">length</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kt">int</span> <span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">length</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">provided</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">expected</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="p">{</span>
+            <span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">flag</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <p>More advanced attacks can be designed, especially on complex
 hardwares. For instance, the time needed to read some data from memory
@@ -244,19 +246,19 @@ common defense against cache-timing attacks consists in replacing
 lookup tables by bitwise instructions. Take the following lookup table
 for example:</p>
 
-<pre><code class="language-C">int table[4] = { 0, 2, 1, 3 };
-</code></pre>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">int</span> <span class="n">table</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span> <span class="p">};</span>
+</code></pre></div></div>
 
 <p>which is indexed by 2 bits (since it has 4 elements) can be computed
 by the following code (provided that each bit of the 2-bit input has
 been put in a different variable <code class="language-plaintext highlighter-rouge">x0</code> and <code class="language-plaintext highlighter-rouge">x1</code>, and that the 2-bit
 output is expected to be in two variables <code class="language-plaintext highlighter-rouge">r0</code> and <code class="language-plaintext highlighter-rouge">r1</code>):</p>
 
-<pre><code class="language-C">void table(bool x0, bool x1, bool* r0, bool* r1) {
-    *r0 = x1;
-    *r1 = x0 | x1;
-}
-</code></pre>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">table</span><span class="p">(</span><span class="n">bool</span> <span class="n">x0</span><span class="p">,</span> <span class="n">bool</span> <span class="n">x1</span><span class="p">,</span> <span class="n">bool</span><span class="o">*</span> <span class="n">r0</span><span class="p">,</span> <span class="n">bool</span><span class="o">*</span> <span class="n">r1</span><span class="p">)</span> <span class="p">{</span>
+    <span class="o">*</span><span class="n">r0</span> <span class="o">=</span> <span class="n">x1</span><span class="p">;</span>
+    <span class="o">*</span><span class="n">r1</span> <span class="o">=</span> <span class="n">x0</span> <span class="o">|</span> <span class="n">x1</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <p>For instance, <code class="language-plaintext highlighter-rouge">table[1]</code> is <code class="language-plaintext highlighter-rouge">2</code>, and <code class="language-plaintext highlighter-rouge">1</code> in binary is <code class="language-plaintext highlighter-rouge">01</code>. Calling
 <code class="language-plaintext highlighter-rouge">table()</code> with <code class="language-plaintext highlighter-rouge">x0 = 0</code> and <code class="language-plaintext highlighter-rouge">x1 = 1</code> produces <code class="language-plaintext highlighter-rouge">r0 = 1</code> and <code class="language-plaintext highlighter-rouge">r1 = 0</code>,
@@ -269,13 +271,13 @@ bit <em>b</em>. If <em>n</em> is greater than 2, this is called <em>higher order
 boolean masking</em>. Adding this protection to the function <code class="language-plaintext highlighter-rouge">table</code>
 introduced above would produce the following code:</p>
 
-<pre><code class="language-C">void table(bool x0[n], bool x1[n], bool r0[n], bool r1[n]) {
-    for (int i = 0; i &lt; n; i++) {
-        r0[i] = x1[i];
-    }
-    r1 = OR(x0, x1);
-}
-</code></pre>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">table</span><span class="p">(</span><span class="n">bool</span> <span class="n">x0</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">bool</span> <span class="n">x1</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">bool</span> <span class="n">r0</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">bool</span> <span class="n">r1</span><span class="p">[</span><span class="n">n</span><span class="p">])</span> <span class="p">{</span>
+    <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">n</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">r0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">x1</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+    <span class="p">}</span>
+    <span class="n">r1</span> <span class="o">=</span> <span class="n">OR</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <p>where <code class="language-plaintext highlighter-rouge">OR</code> is a function computing a bitwise <code class="language-plaintext highlighter-rouge">or</code> between two masked
 data. Already, our initially simple lookup table is becoming quite
@@ -411,10 +413,10 @@ features may leak secrets through timing or otherwise. For instance,
 the assembly generated by Clang 9.0 for the following C implementation
 of a multiplexer:</p>
 
-<pre><code class="language-C">bool mux(bool x, bool y, bool z) {
-    return (x &amp; y) | (~x &amp; z);
-}
-</code></pre>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">bool</span> <span class="nf">mux</span><span class="p">(</span><span class="n">bool</span> <span class="n">x</span><span class="p">,</span> <span class="n">bool</span> <span class="n">y</span><span class="p">,</span> <span class="n">bool</span> <span class="n">z</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">y</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="o">~</span><span class="n">x</span> <span class="o">&amp;</span> <span class="n">z</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div></div>
 
 <p>uses a <code class="language-plaintext highlighter-rouge">cmove</code> instruction, which is not known to be constant-time
 (even though it seems to be, experimentally). Likewise, some integer
@@ -475,15 +477,15 @@ efficient bitslice code by hand, as can be shown in those few lines of
 C code which are part of a DES implementation written by Matthew Kwan
 [28]:</p>
 
-<pre><code class="language-C">s1 (r31 ^ k[47], r0 ^ k[11], r1 ^ k[26], r2 ^ k[3], r3 ^ k[13],
-	r4 ^ k[41], &amp;l8, &amp;l16, &amp;l22, &amp;l30);
-s2 (r3 ^ k[27], r4 ^ k[6], r5 ^ k[54], r6 ^ k[48], r7 ^ k[39],
-	r8 ^ k[19], &amp;l12, &amp;l27, &amp;l1, &amp;l17);
-s3 (r7 ^ k[53], r8 ^ k[25], r9 ^ k[33], r10 ^ k[34], r11 ^ k[17],
-	r12 ^ k[5], &amp;l23, &amp;l15, &amp;l29, &amp;l5);
-s4 (r11 ^ k[4], r12 ^ k[55], r13 ^ k[24], r14 ^ k[32], r15 ^ k[40],
-	r16 ^ k[20], &amp;l25, &amp;l19, &amp;l9, &amp;l0);
-</code></pre>
+<div class="language-c highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s1</span> <span class="p">(</span><span class="n">r31</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">47</span><span class="p">],</span> <span class="n">r0</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="n">r1</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">26</span><span class="p">],</span> <span class="n">r2</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">r3</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">13</span><span class="p">],</span>
+	<span class="n">r4</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">41</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">l8</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l16</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l22</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l30</span><span class="p">);</span>
+<span class="n">s2</span> <span class="p">(</span><span class="n">r3</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">27</span><span class="p">],</span> <span class="n">r4</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="n">r5</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">54</span><span class="p">],</span> <span class="n">r6</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">48</span><span class="p">],</span> <span class="n">r7</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">39</span><span class="p">],</span>
+	<span class="n">r8</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">19</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">l12</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l27</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l1</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l17</span><span class="p">);</span>
+<span class="n">s3</span> <span class="p">(</span><span class="n">r7</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">53</span><span class="p">],</span> <span class="n">r8</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">25</span><span class="p">],</span> <span class="n">r9</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">33</span><span class="p">],</span> <span class="n">r10</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">34</span><span class="p">],</span> <span class="n">r11</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">17</span><span class="p">],</span>
+	<span class="n">r12</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">l23</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l15</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l29</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l5</span><span class="p">);</span>
+<span class="n">s4</span> <span class="p">(</span><span class="n">r11</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">r12</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">55</span><span class="p">],</span> <span class="n">r13</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">24</span><span class="p">],</span> <span class="n">r14</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">32</span><span class="p">],</span> <span class="n">r15</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">40</span><span class="p">],</span>
+	<span class="n">r16</span> <span class="o">^</span> <span class="n">k</span><span class="p">[</span><span class="mi">20</span><span class="p">],</span> <span class="o">&amp;</span><span class="n">l25</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l19</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l9</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">l0</span><span class="p">);</span>
+</code></pre></div></div>
 
 <p>The <a href="https://github.com/DadaIsCrazy/usuba/blob/master/ciphers/des/kwan/des.c#L788-L1043">full
 code</a>
